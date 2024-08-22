@@ -1,0 +1,52 @@
+[
+    {
+        "piece" : "whiteKing",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg"
+    },
+    {
+        "piece" : "whiteQueen",
+        "url" : ""
+    },
+    {
+        "piece" : "whiteBishop",
+        "url" : ""
+    },
+    {
+        "piece" : "whiteKnight",
+        "url" : ""
+    }
+    ,{
+        "piece" : "whiteRook",
+        "url" : ""
+    },
+    {
+        "piece" : "whitePawn",
+        "url" : ""
+    },
+
+
+    {
+        "piece" : "blackKing",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/1/17/Chess_tile_kd.svg"
+    },
+    {
+        "piece" : "blackQueen",
+        "url" : ""
+    },
+    {
+        "piece" : "blackBishop",
+        "url" : ""
+    },
+    {
+        "piece" : "blackKnight",
+        "url" : ""
+    },
+    {
+        "piece" : "blackRook",
+        "url" : ""
+    },
+    {
+        "piece" : "blackPawn",
+        "url" : ""
+    }
+]
