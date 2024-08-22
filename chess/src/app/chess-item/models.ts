@@ -24,7 +24,7 @@ export enum Char {
     BlackKing="k"
 }
 
-export type Piece = {
+export type PieceURL = {
     piece : string,
     url : string
 };

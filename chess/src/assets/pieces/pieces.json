@@ -1,52 +1,52 @@
 [
     {
-        "piece" : "whiteKing",
+        "piece" : "K",
         "url" : "https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg"
     },
     {
-        "piece" : "whiteQueen",
-        "url" : ""
+        "piece" : "Q",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg"
     },
     {
-        "piece" : "whiteBishop",
-        "url" : ""
+        "piece" : "B",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg"
     },
     {
-        "piece" : "whiteKnight",
-        "url" : ""
+        "piece" : "N",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg"
     }
     ,{
-        "piece" : "whiteRook",
-        "url" : ""
+        "piece" : "R",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg"
     },
     {
-        "piece" : "whitePawn",
-        "url" : ""
+        "piece" : "P",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg"
     },
 
 
     {
-        "piece" : "blackKing",
+        "piece" : "k",
         "url" : "https://upload.wikimedia.org/wikipedia/commons/1/17/Chess_tile_kd.svg"
     },
     {
-        "piece" : "blackQueen",
-        "url" : ""
+        "piece" : "q",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg"
     },
     {
-        "piece" : "blackBishop",
-        "url" : ""
+        "piece" : "b",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/9/98/Chess_bdt45.svg"
     },
     {
-        "piece" : "blackKnight",
-        "url" : ""
+        "piece" : "n",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/e/ef/Chess_ndt45.svg"
     },
     {
-        "piece" : "blackRook",
-        "url" : ""
+        "piece" : "r",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/f/ff/Chess_rdt45.svg"
     },
     {
-        "piece" : "blackPawn",
-        "url" : ""
+        "piece" : "p",
+        "url" : "https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg"
     }
 ]
