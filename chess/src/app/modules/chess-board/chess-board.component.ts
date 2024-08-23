@@ -3,6 +3,7 @@ import { ServicepieceService } from '../../servicepiece.service';
 import { Char, Color, Coords, PieceURL } from '../../chess-item/models';
 import { ChessBoard } from '../../chess-item/chess-board';
 import { NgClass, NgFor, NgIf } from '@angular/common';
+import { King } from '../../chess-item/pieces/king';
 
 @Component({
   selector: 'app-chess-board',
@@ -15,20 +16,22 @@ export class ChessBoardComponent implements OnInit {
   
   public map : Map<String,String>;
   public chessBoard : ChessBoard;
-  private turn : Color;
+  private _turn : Color;
   private selectedPossibleMoves : Coords[]|null;
   private transitionStateInit : boolean;
   
   private selectedPieceCoords : Coords | null;
+  private _isGameOver : boolean;
 
   constructor(private getpiece: ServicepieceService){ 
     this.map = new Map<String,String>();
     this.chessBoard = new ChessBoard();
-    this.turn = Color.White;
+    this._turn = Color.White;
     this.selectedPossibleMoves = null;
 
     this.transitionStateInit = false;
     this.selectedPieceCoords = null; 
+    this._isGameOver = false;
   }
 
   ngOnInit(): void {
@@ -37,6 +40,14 @@ export class ChessBoardComponent implements OnInit {
         this.map.set(item.piece,item.url);
       }
     });
+  }
+
+  public get turn(): Color{
+    return this._turn;
+  }
+
+  public get isGameOver(): boolean{
+    return this._isGameOver;
   }
 
   public isDark(x : number, y : number) : boolean{
@@ -51,12 +62,24 @@ export class ChessBoardComponent implements OnInit {
     return char.toLowerCase() === char ? Color.Black : Color.White;
   }
 
+  public checkGameOver(){
+    this._isGameOver = this.chessBoard.isGameOver(this._turn);
+  }
+
+  public isKingInCheck(x:number,y:number) : boolean{
+    const piece : Char|null = this.chessBoard.viewChessBoard[x][y];
+    if(piece && piece.toLowerCase() === "k"){
+      const coords : Coords = {x:x,y:y};
+      return this.chessBoard.isInCheck(coords);
+    }else return false;
+  }
+
   public possibility(x : number, y : number) : void{
     if(!this.transitionStateInit && this.chessBoard.viewChessBoard[x][y] === null)
       this.selectedPossibleMoves = null;
     else if(!this.transitionStateInit && this.chessBoard.viewChessBoard[x][y] !== null){
       const color : Color = this.getColorFromCode(this.chessBoard.viewChessBoard[x][y]);
-      if(color === this.turn){
+      if(color === this._turn){
         this.selectedPieceCoords = {x:x,y:y};
         const char : Char|null = this.chessBoard.viewChessBoard[x][y];
         if(char){
@@ -84,6 +107,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   private filpTurn():void{
-    this.turn = (this.turn === Color.White)? Color.Black : Color.White;
+    this._turn = (this._turn === Color.White)? Color.Black : Color.White;
+    this.checkGameOver();
   }
 }

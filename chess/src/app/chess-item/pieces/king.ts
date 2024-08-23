@@ -27,4 +27,12 @@ export class King extends Piece{
     public set hasMoved(_){
         this._hasMoved = true;
     }
+
+    public LeftCastleDirection() : Coords{
+        return {x:0,y:-2};
+    }
+
+    public RightCastleDirection():Coords{
+        return {x:0,y:3};
+    }
 }

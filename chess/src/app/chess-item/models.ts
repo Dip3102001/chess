@@ -28,3 +28,8 @@ export type PieceURL = {
     piece : string,
     url : string
 };
+
+export enum Side{
+    Left,
+    Right
+}

@@ -3,10 +3,15 @@
         <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="{
             'dark' : isDark(x,y),
             'light' : !isDark(x,y),
-            'selected-square' : isSelected(x,y)
+            'selected-square' : isSelected(x,y),
+            'king-in-check' : isKingInCheck(x,y)
         }" (click)="possibility(x,y)">
     
             <img *ngIf="piece" [src]="map.get(piece)" class="piece" [alt]="piece">
         </div>
     </div>  
 </div>
+
+<h2 *ngIf="this.isGameOver">
+    {{ (this.turn === 0)? "Black" : "White" }} Won the Game!!
+</h2>

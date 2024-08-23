@@ -1,5 +1,4 @@
-import { Settings } from "node:http2";
-import { Char, Color, Coords } from "./models";
+import { Char, Color, Coords, Side } from "./models";
 import { Bishop } from "./pieces/bishop";
 import { King } from "./pieces/king";
 import { Knight } from "./pieces/knight";
@@ -16,8 +15,8 @@ export class ChessBoard{
     constructor(){
         this.chessBoard = [
             [
-                new Rook(Color.White),new Knight(Color.White),new Bishop(Color.White),new King(Color.White),
-                new Queen(Color.White),new Bishop(Color.White),new Knight(Color.White),new Rook(Color.White)
+                new Rook(Color.White,Side.Left),new Knight(Color.White),new Bishop(Color.White),new King(Color.White),
+                new Queen(Color.White),new Bishop(Color.White),new Knight(Color.White),new Rook(Color.White,Side.Right)
             ],
             [
                 new Pawn(Color.White),new Pawn(Color.White),new Pawn(Color.White),new Pawn(Color.White),
@@ -32,8 +31,8 @@ export class ChessBoard{
                 new Pawn(Color.Black),new Pawn(Color.Black),new Pawn(Color.Black),new Pawn(Color.Black)
             ],
             [
-                new Rook(Color.Black),new Knight(Color.Black),new Bishop(Color.Black),new King(Color.Black),
-                new Queen(Color.Black),new Bishop(Color.Black),new Knight(Color.Black),new Rook(Color.Black)
+                new Rook(Color.Black,Side.Left),new Knight(Color.Black),new Bishop(Color.Black),new King(Color.Black),
+                new Queen(Color.Black),new Bishop(Color.Black),new Knight(Color.Black),new Rook(Color.Black,Side.Right)
             ]
         ];
     }
@@ -45,13 +44,69 @@ export class ChessBoard{
     }
 
     public transform(from: Coords, to: Coords): void{
-        const piece : Piece | null = this.chessBoard[from.x][to.y];
+        const piece : Piece | null = this.chessBoard[from.x][from.y];
 
-        if(piece instanceof Pawn)
+        if(piece instanceof Pawn || piece instanceof King || piece instanceof Rook){
+            if(piece instanceof King && !piece.hasMoved){
+                const castleLeftDir : Coords = this.add(from,piece.LeftCastleDirection());
+                const castleRightDir : Coords = this.add(from,piece.RightCastleDirection());
+
+                if(to.x === castleLeftDir.x && to.y === castleLeftDir.y){
+                    const leftRook : Piece|null = this.chessBoard[from.x][0];
+
+                    // transform rook
+                    this.chessBoard[from.x][0] = null;
+                    this.chessBoard[from.x][to.y+1] = leftRook;
+                }
+
+                if(to.x === castleRightDir.x && to.y === castleRightDir.y){
+                    const rightRook : Piece|null = this.chessBoard[from.x][this.chessBoardSize-1];
+                
+                    // transform rook
+                    this.chessBoard[from.x][this.chessBoardSize-1] = null;
+                    this.chessBoard[from.x][to.y-1] = rightRook;
+                }
+            }
+
             piece.hasMoved = true;
+        }
 
         this.chessBoard[to.x][to.y] = this.chessBoard[from.x][from.y];
         this.chessBoard[from.x][from.y] = null;
+    }
+
+    protected isEmptyInBetween(KingCoords : Coords, RookCoords : Coords) : boolean{
+        const from:Coords = (KingCoords.y < RookCoords.y)?KingCoords:RookCoords;
+        const to:Coords = (KingCoords.y < RookCoords.y)?RookCoords:KingCoords;
+
+        let isEmpty : boolean = true;
+        for(let x = from.y+1; x < to.y ;x++){
+            if(this.chessBoard[from.x][x] !== null) 
+                isEmpty = false;
+        }
+
+        return isEmpty;
+    }
+
+    protected castleMoveFor(piece : Piece, pieceCoords : Coords) : Coords[]|null{
+        
+        let moves : Coords[] = new Array<Coords>();
+        
+        if(piece instanceof King){
+            if(!piece.hasMoved){
+                const leftRook : Piece|null = this.chessBoard[pieceCoords.x][0];
+                const rightRook : Piece|null = this.chessBoard[pieceCoords.x][this.chessBoardSize-1];
+                if(leftRook instanceof Rook && leftRook.color === piece.color && !leftRook.hasMoved && this.isEmptyInBetween(pieceCoords,{x:pieceCoords.x,y:0})){
+                    moves.push(this.add(pieceCoords,piece.LeftCastleDirection()));
+                }
+                if(rightRook instanceof Rook && rightRook.color === piece.color && !rightRook.hasMoved && 
+                    this.isEmptyInBetween(pieceCoords,{x:pieceCoords.x,y:this.chessBoardSize-1})){
+                    moves.push(this.add(pieceCoords,piece.RightCastleDirection()));
+                }
+
+                return moves;
+            } else return null;
+        }else return null;
     }
 
     protected get WhiteKing():Coords|null{
@@ -80,6 +135,11 @@ export class ChessBoard{
         else{
             let stack = new Array<Coords>();
             this.getMoveForPiece(init_position,init_position,piece.color,piece.directions,stack,piece,true);
+            let castleMoves : Coords[] | null = this.castleMoveFor(piece,init_position);
+            if(castleMoves !== null)
+                for(const move of castleMoves)
+                    if(this.isSafe(init_position,move))
+                        stack.push(move);
             return stack;
         }
     }
@@ -189,6 +249,10 @@ export class ChessBoard{
     }
 
 
+    public isInCheck(position:Coords){
+        return !this.isSafe(position,position);
+    }
+
     protected isSafe(old_position:Coords, new_position:Coords) : boolean{
         const piece : Piece|null = this.chessBoard[old_position.x][old_position.y];
         
@@ -197,8 +261,8 @@ export class ChessBoard{
         
         const newPositionPiece : Piece | null = this.chessBoard[new_position.x][new_position.y]; 
         // simulating new position
-        this.chessBoard[new_position.x][new_position.y] = piece;
         this.chessBoard[old_position.x][old_position.y] = null;
+        this.chessBoard[new_position.x][new_position.y] = piece;
 
         const set:Set<string> = new Set<string>();
 
@@ -224,5 +288,22 @@ export class ChessBoard{
         this.chessBoard[new_position.x][new_position.y] = newPositionPiece;
 
         return _isSafe;
+    }
+
+    public isGameOver(color:Color) : boolean{
+        const kingCoords : Coords | null = color === Color.White ? this.WhiteKing : this.BlackKing;
+        if(kingCoords && this.isInCheck(kingCoords)){
+            let isOver : boolean = true;
+            for(let x = 0; x < this.chessBoardSize ; x++){
+                for(let y = 0; y < this.chessBoardSize; y++){
+                    const piece : Piece | null = this.chessBoard[x][y];
+                    if(piece instanceof Piece && piece.color === color){
+                        const moves : Coords[] | null = this.getLegalMoves({x:x,y:y});
+                        if(moves) isOver = moves.length === 0;
+                    }
+                }
+            }
+            return isOver;
+        }else return false;
     }
 }
