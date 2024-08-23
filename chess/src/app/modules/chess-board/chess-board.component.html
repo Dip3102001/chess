@@ -2,8 +2,9 @@
     <div *ngFor="let row of this.chessBoard.viewChessBoard; let x = index" class="row">
         <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="{
             'dark' : isDark(x,y),
-            'light' : !isDark(x,y)
-        }">
+            'light' : !isDark(x,y),
+            'selected-square' : isSelected(x,y)
+        }" (click)="possibility(x,y)">
     
             <img *ngIf="piece" [src]="map.get(piece)" class="piece" [alt]="piece">
         </div>

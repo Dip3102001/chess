@@ -26,6 +26,9 @@ export class Pawn extends Piece{
     }
 
     public set hasMoved(_){
+
+        console.log("called..");
+
         this._hasMoved = true;
         this._direction = [
             { x : 1 , y : 0 },
