@@ -3,7 +3,8 @@ import { ServicepieceService } from '../../servicepiece.service';
 import { Char, Color, Coords, PieceURL } from '../../chess-item/models';
 import { ChessBoard } from '../../chess-item/chess-board';
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { King } from '../../chess-item/pieces/king';
+import { CharToPiecesService } from '../../char-to-pieces.service';
+import { Piece } from '../../chess-item/pieces/piece';
 
 @Component({
   selector: 'app-chess-board',
@@ -23,7 +24,11 @@ export class ChessBoardComponent implements OnInit {
   private selectedPieceCoords : Coords | null;
   private _isGameOver : boolean;
 
-  constructor(private getpiece: ServicepieceService){ 
+  private _isPromotionActive : boolean;
+  private _promotionAvailableForColor: Color|null;
+  private _promotionAvailableAt : Coords|null;
+
+  constructor(private getpiece: ServicepieceService, private charToPiece:CharToPiecesService){ 
     this.map = new Map<String,String>();
     this.chessBoard = new ChessBoard();
     this._turn = Color.White;
@@ -32,6 +37,10 @@ export class ChessBoardComponent implements OnInit {
     this.transitionStateInit = false;
     this.selectedPieceCoords = null; 
     this._isGameOver = false;
+    
+    this._isPromotionActive = false;
+    this._promotionAvailableForColor = null;
+    this._promotionAvailableAt = null;
   }
 
   ngOnInit(): void {
@@ -49,6 +58,18 @@ export class ChessBoardComponent implements OnInit {
   public get isGameOver(): boolean{
     return this._isGameOver;
   }
+
+  public get isPromotionActive(): boolean{
+    return this._isPromotionActive;
+  }
+
+  public get promotionAvailableForColor(): Color|null{
+    return this._promotionAvailableForColor;
+  }
+
+  public get promotionAvailableAt(): Coords|null{
+    return this._promotionAvailableAt;
+  } 
 
   public isDark(x : number, y : number) : boolean{
     return (x % 2 + y % 2) % 2 == 0; 
@@ -74,6 +95,12 @@ export class ChessBoardComponent implements OnInit {
     }else return false;
   }
 
+  public promotionPieces() : Char[]{
+    const promoPieceWhite : Char[] = [Char.WhiteRook,Char.WhiteKnight,Char.WhiteBishop,Char.WhiteQueen];
+    const promoPieceBlack : Char[] = [Char.BlackRook,Char.BlackKing,Char.BlackBishop,Char.BlackQueen];
+    return (this.promotionAvailableForColor === Color.White)? promoPieceWhite : promoPieceBlack ;
+  }
+
   public possibility(x : number, y : number) : void{
     if(!this.transitionStateInit && this.chessBoard.viewChessBoard[x][y] === null)
       this.selectedPossibleMoves = null;
@@ -90,7 +117,6 @@ export class ChessBoardComponent implements OnInit {
             this.selectedPossibleMoves = null;
         }
         this.transitionStateInit = true;
-        // console.log(this.selectedPossibleMoves);
       }else{
         this.selectedPossibleMoves = null;
       }
@@ -109,5 +135,25 @@ export class ChessBoardComponent implements OnInit {
   private filpTurn():void{
     this._turn = (this._turn === Color.White)? Color.Black : Color.White;
     this.checkGameOver();
+  }
+
+  private checkForPromotion() : void{
+    const coords : Coords|null = this.chessBoard.checkForPromotion();
+    if(coords){
+      this._isPromotionActive = true;
+      this._promotionAvailableAt = coords;
+      this._promotionAvailableForColor = coords.x === 0? Color.Black : Color.White;
+    } 
+  }
+
+  public promotePiece(piece:Char) : void{
+    // logic to promote piece to selected one;
+    const newPiece : Piece|null = this.charToPiece.charToPiece(piece);
+    const promCoords : Coords|null = this.promotionAvailableAt;
+    this.chessBoard.promotePiece(promCoords,newPiece);
+
+    this._isPromotionActive = false;
+    this._promotionAvailableAt = null;
+    this._promotionAvailableForColor = null;
   }
 }

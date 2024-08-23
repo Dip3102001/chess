@@ -260,6 +260,7 @@ export class ChessBoard{
         const colorOfOpponent = piece?.color === Color.White ? Color.Black : Color.White;
         
         const newPositionPiece : Piece | null = this.chessBoard[new_position.x][new_position.y]; 
+        
         // simulating new position
         this.chessBoard[old_position.x][old_position.y] = null;
         this.chessBoard[new_position.x][new_position.y] = piece;
@@ -272,8 +273,7 @@ export class ChessBoard{
                 if(piece && piece.color == colorOfOpponent){
                     let stack : Coords[] = new Array<Coords>();
                     this.getMoveForPieceWithOutSafe({x:i,y:j},colorOfOpponent,
-                        piece.directions,stack,piece,true
-                    );
+                        piece.directions,stack,piece,true);
                     for(let s of stack)
                         set.add(JSON.stringify(s));
                 }
@@ -306,5 +306,26 @@ export class ChessBoard{
             }
             return true;
         }else return false;
+    }
+
+    public checkForPromotion() : Coords | null{
+        for(let x=0;x<this.chessBoardSize;x++){
+            const piece : Piece | null = this.chessBoard[0][x];
+            if(piece instanceof Pawn && piece.color === Color.Black)
+                return {x:0,y:x};
+        }
+
+        for(let x=0;x<this.chessBoardSize;x++){
+            const piece : Piece | null = this.chessBoard[this.chessBoardSize-1][x];
+            if(piece instanceof Pawn && piece.color === Color.White)
+                return {x:this.chessBoardSize-1,y:x};
+        }
+
+        return null;
+    }
+
+    public promotePiece(coords:Coords|null, piece:Piece|null) : void{
+        if(coords)
+            this.chessBoard[coords.x][coords.y] = piece;
     }
 }

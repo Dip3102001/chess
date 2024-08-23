@@ -15,3 +15,7 @@
 <h2 *ngIf="this.isGameOver">
     {{ (this.turn === 0)? "Black" : "White" }} Won the Game!!
 </h2>
+
+<div *ngIf="isPromotionActive" class="promotion-dialog">
+    <img *ngFor="let piece of this.promotionPieces()" [src]="this.map.get(piece.toString())" (click)="promotePiece(piece)">
+</div>
