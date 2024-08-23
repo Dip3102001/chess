@@ -293,17 +293,18 @@ export class ChessBoard{
     public isGameOver(color:Color) : boolean{
         const kingCoords : Coords | null = color === Color.White ? this.WhiteKing : this.BlackKing;
         if(kingCoords && this.isInCheck(kingCoords)){
-            let isOver : boolean = true;
             for(let x = 0; x < this.chessBoardSize ; x++){
                 for(let y = 0; y < this.chessBoardSize; y++){
                     const piece : Piece | null = this.chessBoard[x][y];
                     if(piece instanceof Piece && piece.color === color){
                         const moves : Coords[] | null = this.getLegalMoves({x:x,y:y});
-                        if(moves) isOver = moves.length === 0;
+                        if(moves)
+                            if(moves.length !== 0)
+                                return false;
                     }
                 }
             }
-            return isOver;
+            return true;
         }else return false;
     }
 }
