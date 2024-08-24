@@ -325,6 +325,8 @@ export class ChessBoard{
     }
 
     public promotePiece(coords:Coords|null, piece:Piece|null) : void{
+        console.log(coords);
+        console.log(piece?.Char);
         if(coords)
             this.chessBoard[coords.x][coords.y] = piece;
     }

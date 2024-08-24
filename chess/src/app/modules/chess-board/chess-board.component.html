@@ -4,7 +4,8 @@
             'dark' : isDark(x,y),
             'light' : !isDark(x,y),
             'selected-square' : isSelected(x,y),
-            'king-in-check' : isKingInCheck(x,y)
+            'king-in-check' : isKingInCheck(x,y),
+            'last-move' : isLastMove(x,y)
         }" (click)="possibility(x,y)">
     
             <img *ngIf="piece" [src]="map.get(piece)" class="piece" [alt]="piece">

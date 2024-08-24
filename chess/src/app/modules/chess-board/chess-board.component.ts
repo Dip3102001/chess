@@ -28,6 +28,8 @@ export class ChessBoardComponent implements OnInit {
   private _promotionAvailableForColor: Color|null;
   private _promotionAvailableAt : Coords|null;
 
+  private _lastmove : Coords|null;
+
   constructor(private getpiece: ServicepieceService, private charToPiece:CharToPiecesService){ 
     this.map = new Map<String,String>();
     this.chessBoard = new ChessBoard();
@@ -41,6 +43,7 @@ export class ChessBoardComponent implements OnInit {
     this._isPromotionActive = false;
     this._promotionAvailableForColor = null;
     this._promotionAvailableAt = null;
+    this._lastmove = null;
   }
 
   ngOnInit(): void {
@@ -71,6 +74,10 @@ export class ChessBoardComponent implements OnInit {
     return this._promotionAvailableAt;
   } 
 
+  public get lastMove() : Coords|null{
+    return this._lastmove;
+  }
+
   public isDark(x : number, y : number) : boolean{
     return (x % 2 + y % 2) % 2 == 0; 
   }
@@ -97,7 +104,7 @@ export class ChessBoardComponent implements OnInit {
 
   public promotionPieces() : Char[]{
     const promoPieceWhite : Char[] = [Char.WhiteRook,Char.WhiteKnight,Char.WhiteBishop,Char.WhiteQueen];
-    const promoPieceBlack : Char[] = [Char.BlackRook,Char.BlackKing,Char.BlackBishop,Char.BlackQueen];
+    const promoPieceBlack : Char[] = [Char.BlackRook,Char.BlackKnight,Char.BlackBishop,Char.BlackQueen];
     return (this.promotionAvailableForColor === Color.White)? promoPieceWhite : promoPieceBlack ;
   }
 
@@ -133,6 +140,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   private filpTurn():void{
+    this.checkForPromotion();
     this._turn = (this._turn === Color.White)? Color.Black : Color.White;
     this.checkGameOver();
   }
@@ -144,6 +152,13 @@ export class ChessBoardComponent implements OnInit {
       this._promotionAvailableAt = coords;
       this._promotionAvailableForColor = coords.x === 0? Color.Black : Color.White;
     } 
+  }
+
+  public isLastMove(x:number,y:number):boolean{
+    if(this.lastMove){
+      return this.lastMove.x === x && this.lastMove.y === y;
+    }
+    else return false;
   }
 
   public promotePiece(piece:Char) : void{
