@@ -1,6 +1,6 @@
 # Angular Chess Game
 
-![Chess Game Screenshot](https://upload.wikimedia.org/wikipedia/commons/6/6f/ChessBoard.jpg)
+![Chess Game Screenshot](https://github.com/Dip3102001/chess/blob/main/SS/chess-main.png)
 
 A fully functional chess game built with Angular. This project implements a complete chess game with all standard chess rules including castling, en passant, pawn promotion, check and checkmate detection.
 
@@ -15,7 +15,7 @@ A fully functional chess game built with Angular. This project implements a comp
 - Responsive chess board design
 - Clean UI with classic chess pieces
 
-![Game in Play](https://upload.wikimedia.org/wikipedia/commons/d/d5/Chess_Board_with_Chess_Pieces.jpg)
+![Game in Play](https://github.com/Dip3102001/chess/blob/main/SS/chess-check.png)
 
 ## Tech Stack
 
@@ -58,8 +58,6 @@ The game features a robust move validation system that includes:
 - Check detection
 - "Move results in check" prevention
 - Special move rules (castling, pawn promotion)
-
-![Piece Promotion](https://upload.wikimedia.org/wikipedia/commons/3/37/ChessQueenPromotion.jpg)
 
 ## Getting Started
 
