@@ -1,6 +1,8 @@
 # Angular Chess Game
 
-![Chess Game Screenshot](https://github.com/Dip3102001/chess/blob/main/SS/chess-main.png)
+<p align="center">
+  <img src="https://github.com/Dip3102001/chess/blob/main/SS/chess-main.png" width="600" alt="Chess Game Screenshot">
+</p>
 
 A fully functional chess game built with Angular. This project implements a complete chess game with all standard chess rules including castling, en passant, pawn promotion, check and checkmate detection.
 
@@ -15,8 +17,9 @@ A fully functional chess game built with Angular. This project implements a comp
 - Responsive chess board design
 - Clean UI with classic chess pieces
 
-![Game in Play](https://github.com/Dip3102001/chess/blob/main/SS/chess-check.png)
-
+<p align="center">
+  <img src="https://github.com/Dip3102001/chess/blob/main/SS/chess-check.png" width="600" alt="Game in Play">
+</p>
 ## Tech Stack
 
 - Angular 17+
