@@ -22,6 +22,7 @@ A fully functional chess game built with Angular. This project implements a comp
   &nbsp;&nbsp;&nbsp;
   <img src="https://github.com/Dip3102001/chess/blob/main/SS/winning.png" width="300" height="300" alt="Game in Play">
 </div>
+
 ## Tech Stack
 
 - Angular 17+
